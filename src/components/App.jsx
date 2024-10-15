@@ -12,7 +12,7 @@ export default function App({ handlePlayAgain }) {
       <p className="text-center my-8 ">
         Pick one or more numbers that sum to the number of stars
       </p>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center flex-wrap p-4">
         {/* stars */}
         <div className="border flex gap-4 flex-wrap p-6 justify-center h-[230px] w-[240px]">
           {gameStatus === "active" ? (
