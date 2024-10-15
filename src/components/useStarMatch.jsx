@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export const useStarMatch = () => {
   const [stars, setStars] = useState(8);
@@ -9,8 +9,13 @@ export const useStarMatch = () => {
   const [secondsLeft, setSecondsLeft] = useState(10);
   const gameStatus =
     availableNum.length === 0 ? "won" : secondsLeft === 0 ? "lost" : "active";
+  const [startGame, setStartGame] = useState(false);
 
   const handleNumberClick = (num, numberStatus) => {
+    if (!startGame) {
+      setStartGame(true);
+    }
+
     let newCandidateNum =
       numberStatus === "available" && secondsLeft > 0
         ? [...candidateNum, num]
@@ -27,32 +32,38 @@ export const useStarMatch = () => {
       setCandidateNum([]);
     }
   };
-     const numberStatus = (num) => {
-       if (!availableNum.includes(num)) {
-         return "used";
-       }
-       if (candidateNum.includes(num)) {
-         return candidateIsWrong ? "wrong" : "candidate";
-       } else {
-         return "available";
-       }
-     };
+  const numberStatus = (num) => {
+    if (!availableNum.includes(num)) {
+      return "used";
+    }
+    if (candidateNum.includes(num)) {
+      return candidateIsWrong ? "wrong" : "candidate";
+    } else {
+      return "available";
+    }
+  };
 
-     useEffect(() => {
-       if (secondsLeft > 0 && availableNum.length !== 0) {
-         const timeId = setTimeout(() => {
-           setSecondsLeft(secondsLeft - 1);
-         }, 1000);
-         return () => {
-           clearTimeout(timeId);
-         };
-       }
-     });
+  useEffect(() => {
+    if (secondsLeft > 0 && availableNum.length > 0 && startGame === true) {
+      const timeId = setTimeout(() => {
+        setSecondsLeft(secondsLeft - 1);
+      }, 1000);
+      return () => {
+        clearTimeout(timeId);
+      };
+    }
+  });
 
-
-  return { gameStatus ,randomStars,secondsLeft,utils,numberStatus,handleNumberClick,utils };
+  return {
+    gameStatus,
+    randomStars,
+    secondsLeft,
+    utils,
+    numberStatus,
+    handleNumberClick,
+    utils,
+  };
 };
-
 
 const utils = {
   sum: (arr) => arr.reduce((acc, cur) => acc + cur, 0),
